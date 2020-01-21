@@ -1,58 +1,17 @@
 # About
 
-A basic Alpine image with a few tools to enable you to better start of your work.
+A completely architecture-independant bash script which waits for a service to be
+available.
 
 Mostly useful for Docker and Kubernetes 
 [init containers](https://kubernetes.io/docs/concepts/workloads/pods/init-containers/)
-as well as debugging your own containers.
 
-If you are missing anything, send in a merge request. Let's just not overdoit, folks.
-Currently available:
-- awk ([gawk](https://www.gnu.org/software/gawk/manual/gawk.html))
-- [bash](https://www.gnu.org/software/bash/)
-- [busybox](https://www.busybox.net) (with aliases for lots of tools...)
-- [curl](https://curl.haxx.se/) and [wget](https://www.gnu.org/software/wget/)
-- [gzip](https://www.gnu.org/software/gzip/), [bzip2](http://www.bzip.org/), and [xz](https://tukaani.org/xz/)
-- [jq](https://stedolan.github.io/jq/) A lightweight and flexible command-line JSON processor
-- [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
-- [libressl](https://www.libressl.org/) (openssl fork)
-- [psql](https://www.postgresql.org/docs/10/app-psql.html) - a PostgreSQL client
-- [sed](https://www.gnu.org/software/sed/)
-- [vim](https://www.vim.org/) (who can live without it)
+TThe script `wait-for-service`, which will wait for a given service to be up before
+continuing. 
 
-AWS scripts:
-- *s3* A bash script for downloading secure files from AWS s3 without the need for the full fledged AWS client
-- *ecr-get-authorization-token* A bash script for getting AWS ECR repository authorization token without the need for
-  AWS client.
-- *ecr-get-login* A script that mimics the `aws ecr get-login` output
-- *ecr-describe-repositories* is a call to [Describe Repositories](https://docs.aws.amazon.com/AmazonECR/latest/APIReference/API_DescribeRepositories.html#ECR-DescribeRepositories-request-maxResults) API
-- *esc-create-repository* is a call to [Create Repository](https://docs.aws.amazon.com/AmazonECR/latest/APIReference/API_CreateRepository.html) API
-
-# AWS
-
-The scripts (e.g. *s3* and *get-authorization-token*) will require you set propery environment variables before
-invoking them, namely: `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY` and `AWS_REGION`. If you're an AWS user,
-you'll know what they eman.
-
-## Usage
-
-```
-export AWS_ACCESS_KEY_ID=xxx 
-export AWS_SECRET_ACCESS_KEY=yyy 
-export AWS_REGION=eu-central-2 
-
-s3 bucket path/file.ext > file.ext
-ecr-get-authorization-token
-$(ect-get-login)
-```
-
-# Wait for service in Kubernetes
-
-This image also includes a bash script `wait-for-service`, which will wait for a given service to be up before
-continuing. It's API/parameter compatible with 
+It's API/parameter compatible with 
 [fabric8-dependency-wait-service](https://github.com/fabric8-services/fabric8-dependency-wait-service) but
 since it's written in BASH and not GO:
-- the image is much smaller
 - there's no need to include different binaries for different platforms
 - more platforms are automatically supported out of the box (e.g. wherever BASH works)
 
@@ -133,4 +92,12 @@ The following protocols are supported:
 * **TCP**: The syntax is: `tcp://<host>:<port>`. [Netcat](http://netcat.sourceforge.net/) is used to 
   connect to the service. Service is considered up when *netcat* successfully connects and 
   *return a zero exit code*. If `netcat` is not avaialbe, uses `/dev/tcp` to send open up a port.
+
+
+# Similar tools
+
+- There's [wait-for-it](https://github.com/vishnubob/wait-for-it) which seems to have a similar goal,
+  but a bit different syntax.
+- There's [fabric8-dependency-wait-service](https://github.com/fabric8-services/fabric8-dependency-wait-service),
+  which was the initial inspiration for this service
 
