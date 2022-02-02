@@ -6,7 +6,7 @@ available.
 Mostly useful for Docker and Kubernetes 
 [init containers](https://kubernetes.io/docs/concepts/workloads/pods/init-containers/)
 
-TThe script `wait-for-service`, which will wait for a given service to be up before
+The script `wait-for-service`, which will wait for a given service to be up before
 continuing. 
 
 It's API/parameter compatible with 
